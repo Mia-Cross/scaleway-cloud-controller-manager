@@ -162,9 +162,11 @@ func (i *instances) GetZoneByNodeName(ctx context.Context, nodeName types.NodeNa
 
 // instanceAddresses extracts NodeAdress from the server
 func (i *instances) instanceAddresses(server *scwinstance.Server) []v1.NodeAddress {
+	klog.Infof("***********************************\n(i *instances) instanceAddresses(server *scwinstance.Server) []v1.NodeAddress\n************************************")
 	addresses := []v1.NodeAddress{
 		{Type: v1.NodeHostName, Address: server.Hostname},
 	}
+	klog.Infof("addresses A = %v", addresses)
 
 	if server.PublicIP != nil {
 		addresses = append(
@@ -173,6 +175,7 @@ func (i *instances) instanceAddresses(server *scwinstance.Server) []v1.NodeAddre
 			v1.NodeAddress{Type: v1.NodeExternalDNS, Address: fmt.Sprintf("%s.pub.instances.scw.cloud", server.ID)},
 		)
 	}
+	klog.Infof("addresses B = %v", addresses)
 
 	var pnNIC *scwinstance.PrivateNIC
 	if i.pnID != "" {
@@ -183,6 +186,7 @@ func (i *instances) instanceAddresses(server *scwinstance.Server) []v1.NodeAddre
 			}
 		}
 	}
+	klog.Infof("addresses C = %v", addresses)
 
 	if pnNIC != nil {
 		region, _ := server.Zone.Region()
@@ -210,8 +214,10 @@ func (i *instances) instanceAddresses(server *scwinstance.Server) []v1.NodeAddre
 			)
 		}
 
+		klog.Infof("addresses D = %v", addresses)
 		return addresses
 	}
+	klog.Infof("addresses E = %v", addresses)
 
 	// fallback to legacy private ip
 	if server.PrivateIP != nil && *server.PrivateIP != "" {
@@ -221,6 +227,7 @@ func (i *instances) instanceAddresses(server *scwinstance.Server) []v1.NodeAddre
 			v1.NodeAddress{Type: v1.NodeInternalDNS, Address: fmt.Sprintf("%s.priv.instances.scw.cloud", server.ID)},
 		)
 	}
+	klog.Infof("addresses F = %v", addresses)
 
 	return addresses
 }
