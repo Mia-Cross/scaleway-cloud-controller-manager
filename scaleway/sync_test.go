@@ -81,6 +81,12 @@ func TestTagLabelParser(t *testing.T) {
 		"word=invalid/dash":     {"", ""},
 		"dash/word":             {"", ""},
 		"dash/equal=value":      {"", ""},
+		"noprefix=kops.k8s.io/cluster=plop.k8s.local":                {"kops.k8s.io/cluster", "plop.k8s.local"},
+		"noprefix=kops.k8s.io/needs-update":                          {"kops.k8s.io/needs-update", ""},
+		"noprefix=kops.k8s.io/etcd=events":                           {"kops.k8s.io/etcd", "events"},
+		"noprefix=kops.k8s.io/role=ControlPlane":                     {"kops.k8s.io/role", "ControlPlane"},
+		"noprefix=kops.k8s.io/role=Node":                             {"kops.k8s.io/role", "Node"},
+		"noprefix=kops.k8s.io/instance-group=control-plane.fr-par-1": {"kops.k8s.io/instance-group", "control-plane.fr-par-1"},
 	}
 
 	for tag, expected := range tagsTest {
